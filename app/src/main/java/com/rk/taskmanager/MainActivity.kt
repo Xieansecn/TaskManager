@@ -234,7 +234,7 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         if (Settings.workingMode != -1) {
             lifecycleScope.launch(Dispatchers.Main) {
-                val daemonResult = startDaemon(context = this@MainActivity, Settings.workingMode)
+                val daemonResult = startDaemon(this@MainActivity, Settings.workingMode)
                 if (daemonResult != DaemonResult.OK) {
                     delay(3000)
 
