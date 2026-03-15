@@ -15,19 +15,33 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
-fun TextCard(modifier: Modifier = Modifier,text: String?,description: String? = null,applyPaddings: Boolean = false,selection: Boolean = false,copyDesOnLong: Boolean = true) {
+fun TextCard(
+    modifier: Modifier = Modifier,
+    text: String?,
+    description: String? = null,
+    applyPaddings: Boolean = false,
+    selection: Boolean = false,
+    copyDesOnLong: Boolean = true
+) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    SettingsToggle(applyPaddingsNoSwitch = applyPaddings,
-        modifier = modifier, label = text, description = description, default = false, showSwitch = false, selection = selection, onLongClick = {
-            if (copyDesOnLong){
+    SettingsToggle(
+        applyPaddingsNoSwitch = applyPaddings,
+        modifier = modifier,
+        label = text,
+        description = description,
+        default = false,
+        showSwitch = false,
+        selection = selection,
+        onLongClick = {
+            if (copyDesOnLong) {
                 val clipboard = TaskManager.requireContext()
                     .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText(text, description)
                 clipboard.setPrimaryClip(clip)
 
-                scope.launch(Dispatchers.Main){
+                scope.launch(Dispatchers.Main) {
                     Toast.makeText(context, strings.copied.getString(), Toast.LENGTH_SHORT).show()
                 }
 

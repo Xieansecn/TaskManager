@@ -18,7 +18,6 @@ import rikka.shizuku.ShizukuRemoteProcess
 import java.lang.reflect.InvocationTargetException
 
 
-
 @OptIn(DelicateCoroutinesApi::class)
 @Keep
 object ShizukuShell {
@@ -37,34 +36,34 @@ object ShizukuShell {
         }
     }
 
-    fun isShizukuRunning(): Boolean{
+    fun isShizukuRunning(): Boolean {
         return try {
             Shizuku.getBinder() != null && Shizuku.pingBinder()
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             return false
         }
     }
 
 
-    fun isPermissionGranted(): Boolean{
+    fun isPermissionGranted(): Boolean {
         return try {
             Shizuku.checkSelfPermission() == PackageManager.PERMISSION_GRANTED
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             false
         }
     }
 
-    fun isRoot(): Boolean{
-        if (isShizukuRunning().not()){
+    fun isRoot(): Boolean {
+        if (isShizukuRunning().not()) {
             return false
         }
         return Shizuku.getUid() == 0
     }
 
-    fun isShell(): Boolean{
-        if (isShizukuRunning().not()){
+    fun isShell(): Boolean {
+        if (isShizukuRunning().not()) {
             return false
         }
         return Shizuku.getUid() == 2000
@@ -72,7 +71,10 @@ object ShizukuShell {
 
     fun isShizukuInstalled(): Boolean {
         return try {
-            TaskManager.requireContext().packageManager.getPackageInfo("moe.shizuku.privileged.api", 0)
+            TaskManager.requireContext().packageManager.getPackageInfo(
+                "moe.shizuku.privileged.api",
+                0
+            )
             true
         } catch (e: PackageManager.NameNotFoundException) {
             false
@@ -80,12 +82,11 @@ object ShizukuShell {
     }
 
 
-
-    fun requestPermission(){
-        if (isShizukuRunning().not()){
+    fun requestPermission() {
+        if (isShizukuRunning().not()) {
             return
         }
-        if (isPermissionGranted()){
+        if (isPermissionGranted()) {
             return
         }
 
@@ -99,7 +100,11 @@ object ShizukuShell {
         NoSuchMethodException::class,
         InterruptedException::class
     )
-    suspend fun newProcess(cmd: Array<String?>, env: Array<String?>?, dir: String?): Pair<Int,String> =
+    suspend fun newProcess(
+        cmd: Array<String?>,
+        env: Array<String?>?,
+        dir: String?
+    ): Pair<Int, String> =
         withContext(Dispatchers.IO) {
 
             return@withContext try {
@@ -126,12 +131,18 @@ object ShizukuShell {
                 println("done")
                 println("exitCode ${result.exitValue()}")
 
-                Log.e("Shizuku_newProcess",result.errorStream.bufferedReader().readLines().toString())
+                Log.e(
+                    "Shizuku_newProcess",
+                    result.errorStream.bufferedReader().readLines().toString()
+                )
 
-                Pair(result.exitValue(),result.inputStream.bufferedReader().readLines().fastJoinToString("\n"))
-            }catch (e: Exception){
+                Pair(
+                    result.exitValue(),
+                    result.inputStream.bufferedReader().readLines().fastJoinToString("\n")
+                )
+            } catch (e: Exception) {
                 e.printStackTrace()
-                Pair(-1,e.message.toString())
+                Pair(-1, e.message.toString())
             }
         }
 }

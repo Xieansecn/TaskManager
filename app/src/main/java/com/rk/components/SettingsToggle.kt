@@ -40,7 +40,7 @@ fun SettingsToggle(
     startWidget: (@Composable () -> Unit)? = null,
     endWidget: (@Composable () -> Unit)? = null,
 ) {
-    if (showSwitch && endWidget != null){
+    if (showSwitch && endWidget != null) {
         throw IllegalStateException("endWidget with show switch")
     }
 
@@ -48,7 +48,8 @@ fun SettingsToggle(
         var state by remember {
             mutableStateOf(default)
         }
-        PreferenceSwitch(checked = state,
+        PreferenceSwitch(
+            checked = state,
             onLongClick = onLongClick,
             onCheckedChange = {
                 if (isSwitchLocked.not()) {
@@ -91,24 +92,36 @@ fun SettingsToggle(
                 .padding(start = 16.dp),
             title = {
                 if (label != null) {
-                   if (selection){
-                       SelectionContainer {
-                           Text(fontWeight = FontWeight.Bold, text = label, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                       }
-                   }else{
-                       Text(fontWeight = FontWeight.Bold, text = label, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                   }
+                    if (selection) {
+                        SelectionContainer {
+                            Text(
+                                fontWeight = FontWeight.Bold,
+                                text = label,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    } else {
+                        Text(
+                            fontWeight = FontWeight.Bold,
+                            text = label,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
             },
-            description = { description?.let {
-                if (selection){
-                    SelectionContainer {
-                        Text(text = it)
+            description = {
+                description?.let {
+                    if (selection) {
+                        SelectionContainer {
+                            Text(text = it)
+                        }
+                    } else {
+                        Text(it)
                     }
-                }else{
-                    Text(it)
                 }
-            } },
+            },
             enabled = true,
             applyPaddings = applyPaddingsNoSwitch,
             endWidget = endWidget,

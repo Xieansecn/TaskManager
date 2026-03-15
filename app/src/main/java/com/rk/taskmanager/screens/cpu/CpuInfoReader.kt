@@ -83,7 +83,7 @@ object CpuInfoReader {
     private fun String.toMHz(): String {
         val khz = toLongOrNull() ?: return this
         return when {
-            khz >= 1000000 -> String.format(Locale.ENGLISH,"%.2f GHz", khz / 1000000.0)
+            khz >= 1000000 -> String.format(Locale.ENGLISH, "%.2f GHz", khz / 1000000.0)
             khz >= 1000 -> "${khz / 1000} MHz"
             else -> "$khz kHz"
         }

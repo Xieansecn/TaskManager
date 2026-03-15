@@ -1,24 +1,23 @@
 package com.rk.taskmanager.screens
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.foundation.layout.height
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Card
@@ -33,22 +32,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.rk.taskmanager.ProcessViewModel
 import com.rk.taskmanager.R
+import com.rk.taskmanager.SystemViewModel
 import com.rk.taskmanager.screens.cpu.CPU
 import com.rk.taskmanager.screens.gpu.GPU
 import com.rk.taskmanager.screens.gpu.GpuViewModel
-import com.rk.taskmanager.SystemViewModel
 import com.rk.taskmanager.screens.ram.RAM
 
 private val globalExpandedCards = mutableStateOf(setOf("CPU"))
 
 @Composable
-fun ResourceHostScreen(modifier: Modifier = Modifier, viewModel: ProcessViewModel, gpuViewModel: GpuViewModel, systemViewModel: SystemViewModel) {
+fun ResourceHostScreen(
+    modifier: Modifier = Modifier,
+    viewModel: ProcessViewModel,
+    gpuViewModel: GpuViewModel,
+    systemViewModel: SystemViewModel
+) {
     var expandedCards by remember { globalExpandedCards }
 
     // 【修改点 1】：彻底移除了 BoxWithConstraints 和高度计算逻辑
@@ -63,7 +68,8 @@ fun ResourceHostScreen(modifier: Modifier = Modifier, viewModel: ProcessViewMode
             iconRes = R.drawable.cpu_24px,
             isExpanded = expandedCards.contains("CPU"),
             onExpandClick = {
-                expandedCards = if (expandedCards.contains("CPU")) expandedCards - "CPU" else expandedCards + "CPU"
+                expandedCards =
+                    if (expandedCards.contains("CPU")) expandedCards - "CPU" else expandedCards + "CPU"
             }
         ) {
             // 【修改点 2】：不再传入固定 height，仅仅给一点内边距，它会自动撑开到最完美的高度！
@@ -79,7 +85,8 @@ fun ResourceHostScreen(modifier: Modifier = Modifier, viewModel: ProcessViewMode
             iconRes = R.drawable.memory_alt_24px,
             isExpanded = expandedCards.contains("RAM"),
             onExpandClick = {
-                expandedCards = if (expandedCards.contains("RAM")) expandedCards - "RAM" else expandedCards + "RAM"
+                expandedCards =
+                    if (expandedCards.contains("RAM")) expandedCards - "RAM" else expandedCards + "RAM"
             }
         ) {
             RAM(
@@ -93,7 +100,8 @@ fun ResourceHostScreen(modifier: Modifier = Modifier, viewModel: ProcessViewMode
             iconRes = R.drawable.cpu_24px,
             isExpanded = expandedCards.contains("GPU"),
             onExpandClick = {
-                expandedCards = if (expandedCards.contains("GPU")) expandedCards - "GPU" else expandedCards + "GPU"
+                expandedCards =
+                    if (expandedCards.contains("GPU")) expandedCards - "GPU" else expandedCards + "GPU"
             }
         ) {
             GPU(
@@ -132,7 +140,12 @@ fun ExpandableResourceCard(
             ListItem(
                 colors = androidx.compose.material3.ListItemDefaults.colors(containerColor = Color.Transparent),
                 headlineContent = { Text(text = title) },
-                leadingContent = { Icon(painter = painterResource(iconRes), contentDescription = null) },
+                leadingContent = {
+                    Icon(
+                        painter = painterResource(iconRes),
+                        contentDescription = null
+                    )
+                },
                 trailingContent = {
                     Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
@@ -143,7 +156,8 @@ fun ExpandableResourceCard(
                 modifier = Modifier.clickable { onExpandClick() }
             )
 
-            AnimatedVisibility(visible = isExpanded,
+            AnimatedVisibility(
+                visible = isExpanded,
                 enter = expandVertically(animationSpec = spring(stiffness = Spring.StiffnessLow)) + fadeIn(),
                 exit = shrinkVertically(animationSpec = spring(stiffness = Spring.StiffnessLow)) + fadeOut()
             ) {

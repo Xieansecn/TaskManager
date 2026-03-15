@@ -11,9 +11,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -153,7 +153,8 @@ fun SupportSettingsScreen(modifier: Modifier = Modifier) {
                         if (intent.resolveActivity(context.packageManager) != null) {
                             context.startActivity(chooser)
                         } else {
-                            Toast.makeText(context, "No upi app available", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "No upi app available", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     },
                 )
@@ -161,7 +162,6 @@ fun SupportSettingsScreen(modifier: Modifier = Modifier) {
         }
     }
 }
-
 
 
 private fun isUPISupported(context: Context): Boolean {
@@ -185,7 +185,8 @@ private fun isUPISupported(context: Context): Boolean {
                 .isNotEmpty()
         } else {
             @Suppress("DEPRECATION")
-            packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).isNotEmpty()
+            packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+                .isNotEmpty()
         }
 
     return isIndia || canHandleUPI

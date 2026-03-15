@@ -32,7 +32,10 @@ import java.util.Date
 import java.util.Locale
 
 val daemon_messages = received_messages.asSharedFlow()
-val send_daemon_messages = MutableSharedFlow<String>(extraBufferCapacity = 10, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+val send_daemon_messages = MutableSharedFlow<String>(
+    extraBufferCapacity = 10,
+    onBufferOverflow = BufferOverflow.DROP_OLDEST
+)
 var isConnected by mutableStateOf(false)
     private set
 
@@ -42,7 +45,10 @@ private object DaemonServer {
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
     val received_messages =
-        MutableSharedFlow<String>(extraBufferCapacity = 10, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+        MutableSharedFlow<String>(
+            extraBufferCapacity = 10,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST
+        )
 
 
     private var acceptJob: Job? = null
@@ -199,7 +205,8 @@ suspend fun startDaemon(
     context: Context,
     mode: Int
 ): DaemonResult {
-    val daemonFile = File(TaskManager.requireContext().applicationInfo.nativeLibraryDir, "libtaskmanagerd.so")
+    val daemonFile =
+        File(TaskManager.requireContext().applicationInfo.nativeLibraryDir, "libtaskmanagerd.so")
     val result = withContext(Dispatchers.IO) {
         if (daemonCalled) {
             return@withContext DaemonResult.DAEMON_ALREADY_BEING_STARTED
@@ -210,7 +217,9 @@ suspend fun startDaemon(
 
         val daemonServer = DaemonServer.start()
         if (daemonServer.second != null) {
-            return@withContext DaemonResult.UNKNOWN_ERROR.also { it.message = daemonServer.second?.message.toString() }
+            return@withContext DaemonResult.UNKNOWN_ERROR.also {
+                it.message = daemonServer.second?.message.toString()
+            }
         }
 
         val port = daemonServer.first
@@ -254,12 +263,15 @@ suspend fun startDaemon(
                 WorkingMode.ROOT.id -> {
                     val suCheck = isSuWorking()
 
-                    if (!suCheck.first){
-                        return@withContext DaemonResult.SU_FAILED.also { it.message = suCheck.second?.message ?: "unknown error" }
+                    if (!suCheck.first) {
+                        return@withContext DaemonResult.SU_FAILED.also {
+                            it.message = suCheck.second?.message ?: "unknown error"
+                        }
                     }
 
                     //val cmd = arrayOf("su", "-c", daemonFile.absolutePath, "-p", port.toString(), "-D")
-                    val cmd = arrayOf("su", "-c", "${daemonFile.absolutePath} -p ${port.toString()} -D")
+                    val cmd =
+                        arrayOf("su", "-c", "${daemonFile.absolutePath} -p ${port.toString()} -D")
                     val result = newProcess(cmd = cmd, env = arrayOf(), workingDir = "/")
                     if (result.first == 0) {
                         DaemonResult.OK
@@ -291,10 +303,10 @@ suspend fun isSuWorking(): Pair<Boolean, Exception?> = withContext(Dispatchers.I
         val process = Runtime.getRuntime().exec(arrayOf("su", "-c", "id -u"))
         val output = process.inputStream.bufferedReader().readLine()
         process.waitFor()
-        Pair(output == "0",null)
+        Pair(output == "0", null)
     } catch (e: Exception) {
         e.printStackTrace()
-        Pair(false,e)
+        Pair(false, e)
     }
 }
 
@@ -326,7 +338,10 @@ private suspend fun newProcess(
         }
 
         val process = processBuilder.start()
-        Pair(process.waitFor(), process.inputStream.bufferedReader().readLines().fastJoinToString("\n"))
+        Pair(
+            process.waitFor(),
+            process.inputStream.bufferedReader().readLines().fastJoinToString("\n")
+        )
     } catch (e: Exception) {
         e.printStackTrace()
         Pair(-1, e.message.toString())

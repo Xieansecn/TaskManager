@@ -20,7 +20,7 @@ fun InputDialog(
     onInputValueChange: (String) -> Unit,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    singleLineMode:Boolean = true
+    singleLineMode: Boolean = true
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss() },

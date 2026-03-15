@@ -16,7 +16,7 @@ import com.rk.taskmanager.strings
 
 @Composable
 fun GraphSettings(modifier: Modifier = Modifier) {
-    PreferenceLayout(label = "Graph"){
+    PreferenceLayout(label = "Graph") {
         val minFreq = 150 // 150ms at 0%
         val maxFreq = 1000
 
@@ -39,7 +39,8 @@ fun GraphSettings(modifier: Modifier = Modifier) {
                     value = sliderPosition,
                     onValueChange = { sliderPosition = it },
                     onValueChangeFinished = {
-                        Settings.updateFrequency = (minFreq + (sliderPosition * (maxFreq - minFreq))).toInt()
+                        Settings.updateFrequency =
+                            (minFreq + (sliderPosition * (maxFreq - minFreq))).toInt()
                     }
                 )
             }

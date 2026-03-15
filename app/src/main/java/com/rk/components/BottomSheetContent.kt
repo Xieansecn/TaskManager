@@ -24,7 +24,9 @@ fun BottomSheetContent(
 ) {
     val contentPadding = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)
 
-    Column(modifier = modifier.fillMaxWidth().safeDrawingPadding()) {
+    Column(modifier = modifier
+        .fillMaxWidth()
+        .safeDrawingPadding()) {
         title?.let {
             Box(modifier = Modifier.padding(start = 16.dp, end = 16.dp)) {
                 val textStyle = MaterialTheme.typography.titleLarge
@@ -47,7 +49,9 @@ fun BottomSheetContent(
         }
         Row(
             horizontalArrangement = Arrangement.End,
-            modifier = Modifier.padding(16.dp).fillMaxWidth(),
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
         ) {
             buttons()
         }

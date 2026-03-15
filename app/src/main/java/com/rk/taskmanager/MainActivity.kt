@@ -1,15 +1,12 @@
 package com.rk.taskmanager
 
-import android.opengl.GLES20
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.*
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
@@ -22,27 +19,26 @@ import com.rk.isConnected
 import com.rk.send_daemon_messages
 import com.rk.startDaemon
 import com.rk.taskmanager.animations.NavigationAnimationTransitions
-import com.rk.taskmanager.settings.About
 import com.rk.taskmanager.screens.MainScreen
 import com.rk.taskmanager.screens.ProcessInfo
-import com.rk.taskmanager.settings.SelectedWorkingMode
-import com.rk.taskmanager.settings.SettingsScreen
-import com.rk.taskmanager.settings.SupportSettingsScreen
-import com.rk.taskmanager.settings.Themes
-import com.rk.taskmanager.screens.procByPid
 import com.rk.taskmanager.screens.cpu.updateCpuGraph
 import com.rk.taskmanager.screens.gpu.GpuViewModel
 import com.rk.taskmanager.screens.gpu.updateGpuGraph
+import com.rk.taskmanager.screens.procByPid
 import com.rk.taskmanager.screens.ram.updateRamAndSwapGraph
+import com.rk.taskmanager.settings.About
 import com.rk.taskmanager.settings.DaemonSettings
 import com.rk.taskmanager.settings.GraphSettings
 import com.rk.taskmanager.settings.ProcSettings
+import com.rk.taskmanager.settings.SelectedWorkingMode
 import com.rk.taskmanager.settings.Settings
+import com.rk.taskmanager.settings.SettingsScreen
+import com.rk.taskmanager.settings.SupportSettingsScreen
+import com.rk.taskmanager.settings.Themes
 import com.rk.taskmanager.ui.theme.TaskManagerTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -67,7 +63,7 @@ class MainActivity : ComponentActivity() {
     var navControllerRef: WeakReference<NavController?> = WeakReference(null)
         private set
 
-     private val TAG = "MainActivity"
+    private val TAG = "MainActivity"
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,7 +84,7 @@ class MainActivity : ComponentActivity() {
                         delay(32)
                     }
 
-                    if (message.startsWith("GPU:")){
+                    if (message.startsWith("GPU:")) {
                         updateGpuGraph(message.removePrefix("GPU:").toInt())
                         delay(32)
                     }
@@ -104,7 +100,11 @@ class MainActivity : ComponentActivity() {
 
                             val percentage = (usedValue / totalValue) * 100
 
-                            updateRamAndSwapGraph(percentage.toInt(), usedValue.toLong(), totalValue.toLong())
+                            updateRamAndSwapGraph(
+                                percentage.toInt(),
+                                usedValue.toLong(),
+                                totalValue.toLong()
+                            )
                         }
                     }
 
@@ -130,10 +130,10 @@ class MainActivity : ComponentActivity() {
                         delay(16)
                         send_daemon_messages.emit("SWAP_PING")
 
-                        if (hasSupportedGPU){
+                        if (hasSupportedGPU) {
                             delay(15)
                             send_daemon_messages.emit("GPU_PING")
-                        }else{
+                        } else {
                             hasSupportedGPU = run {
                                 val renderer = gpuViewModel.gpuInfo.value?.renderer
                                 renderer?.contains("mali", true) == true ||
@@ -142,11 +142,12 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-                val delayMs = if (instance?.navControllerRef?.get()?.currentDestination?.route == SettingsRoutes.Home.route) {
-                    Settings.updateFrequency.toLong()
-                } else {
-                    Settings.updateFrequency.toLong() * 2
-                }
+                val delayMs =
+                    if (instance?.navControllerRef?.get()?.currentDestination?.route == SettingsRoutes.Home.route) {
+                        Settings.updateFrequency.toLong()
+                    } else {
+                        Settings.updateFrequency.toLong() * 2
+                    }
                 delay(delayMs)
             }
         }
@@ -169,7 +170,12 @@ class MainActivity : ComponentActivity() {
                         popExitTransition = { NavigationAnimationTransitions.popExitTransition },
                     ) {
                         composable(SettingsRoutes.Home.route) {
-                            MainScreen(navController = navController, viewModel = viewModel, gpuViewModel = gpuViewModel, systemViewModel = systemViewModel)
+                            MainScreen(
+                                navController = navController,
+                                viewModel = viewModel,
+                                gpuViewModel = gpuViewModel,
+                                systemViewModel = systemViewModel
+                            )
                         }
 
                         composable(SettingsRoutes.SelectWorkingMode.route) {
@@ -182,27 +188,27 @@ class MainActivity : ComponentActivity() {
 
 
 
-                        composable(SettingsRoutes.Daemon.route){
+                        composable(SettingsRoutes.Daemon.route) {
                             DaemonSettings()
                         }
 
-                        composable(SettingsRoutes.Graphs.route){
+                        composable(SettingsRoutes.Graphs.route) {
                             GraphSettings()
                         }
 
-                        composable(SettingsRoutes.Procs.route){
+                        composable(SettingsRoutes.Procs.route) {
                             ProcSettings()
                         }
 
-                        composable(SettingsRoutes.Themes.route){
+                        composable(SettingsRoutes.Themes.route) {
                             Themes()
                         }
 
-                        composable(SettingsRoutes.Support.route){
+                        composable(SettingsRoutes.Support.route) {
                             SupportSettingsScreen()
                         }
 
-                        composable(SettingsRoutes.About.route){
+                        composable(SettingsRoutes.About.route) {
                             About()
                         }
 
@@ -214,13 +220,17 @@ class MainActivity : ComponentActivity() {
 
                             if (proc != null) {
                                 LaunchedEffect(Unit) {
-                                    if (proc.killed.value){
+                                    if (proc.killed.value) {
                                         navController.popBackStack()
                                         return@LaunchedEffect
                                     }
                                 }
-                                ProcessInfo(proc = proc, navController = navController, viewModel = viewModel)
-                            }else{
+                                ProcessInfo(
+                                    proc = proc,
+                                    navController = navController,
+                                    viewModel = viewModel
+                                )
+                            } else {
                                 navController.popBackStack()
                             }
                         }
@@ -238,8 +248,8 @@ class MainActivity : ComponentActivity() {
                 if (daemonResult != DaemonResult.OK) {
                     delay(3000)
 
-                    if (isConnected.not()){
-                        if (navControllerRef.get()?.currentDestination?.route != SettingsRoutes.SelectWorkingMode.route){
+                    if (isConnected.not()) {
+                        if (navControllerRef.get()?.currentDestination?.route != SettingsRoutes.SelectWorkingMode.route) {
                             navControllerRef.get()?.navigate(SettingsRoutes.SelectWorkingMode.route)
                         }
 
@@ -257,7 +267,7 @@ sealed class SettingsRoutes(val route: String) {
     data object Settings : SettingsRoutes("settings")
     data object SelectWorkingMode : SettingsRoutes("SelectWorkingMode")
     data object ProcessInfo : SettingsRoutes("proc/{pid}") {
-        fun createRoute(proc: ProcessUiModel):String{
+        fun createRoute(proc: ProcessUiModel): String {
             procByPid[proc.proc.pid] = WeakReference(proc)
             return "proc/${proc.proc.pid}"
         }

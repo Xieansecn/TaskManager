@@ -60,19 +60,19 @@ import com.rk.taskmanager.SettingsRoutes
 import com.rk.taskmanager.settings.Settings
 import com.rk.taskmanager.settings.pullToRefresh_procs
 import com.rk.taskmanager.strings
-import java.util.Locale
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Processes(
-        modifier: Modifier = Modifier,
-        viewModel: ProcessViewModel,
-        navController: NavController,
-        showFilter: Boolean,
-        onDismissFilter: () -> Unit,
-        showSort: Boolean,
-        onDismissSort: () -> Unit
+    modifier: Modifier = Modifier,
+    viewModel: ProcessViewModel,
+    navController: NavController,
+    showFilter: Boolean,
+    onDismissFilter: () -> Unit,
+    showSort: Boolean,
+    onDismissSort: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     var showKillDialog by remember { mutableStateOf<ProcessUiModel?>(null) }
@@ -87,49 +87,49 @@ fun Processes(
 
                 // USER APPS
                 SettingsToggle(
-                        label = stringResource(strings.show_user_app),
-                        showSwitch = true,
-                        default = showUserApps,
-                        isEnabled = !(showUserApps && !showSystemApps && !showLinuxProcess),
-                        sideEffect = { newValue ->
-                            if (!newValue && !showSystemApps && !showLinuxProcess)
-                                    return@SettingsToggle
-                            scope.launch {
-                                Settings.showUserApps = newValue
-                                viewModel.setShowUserApps(newValue)
-                            }
+                    label = stringResource(strings.show_user_app),
+                    showSwitch = true,
+                    default = showUserApps,
+                    isEnabled = !(showUserApps && !showSystemApps && !showLinuxProcess),
+                    sideEffect = { newValue ->
+                        if (!newValue && !showSystemApps && !showLinuxProcess)
+                            return@SettingsToggle
+                        scope.launch {
+                            Settings.showUserApps = newValue
+                            viewModel.setShowUserApps(newValue)
                         }
+                    }
                 )
 
                 // SYSTEM APPS
                 SettingsToggle(
-                        label = stringResource(strings.show_system_app),
-                        showSwitch = true,
-                        default = showSystemApps,
-                        isEnabled = !(showSystemApps && !showUserApps && !showLinuxProcess),
-                        sideEffect = { newValue ->
-                            if (!newValue && !showUserApps && !showLinuxProcess)
-                                    return@SettingsToggle
-                            scope.launch {
-                                Settings.showSystemApps = newValue
-                                viewModel.setShowSystemApps(newValue)
-                            }
+                    label = stringResource(strings.show_system_app),
+                    showSwitch = true,
+                    default = showSystemApps,
+                    isEnabled = !(showSystemApps && !showUserApps && !showLinuxProcess),
+                    sideEffect = { newValue ->
+                        if (!newValue && !showUserApps && !showLinuxProcess)
+                            return@SettingsToggle
+                        scope.launch {
+                            Settings.showSystemApps = newValue
+                            viewModel.setShowSystemApps(newValue)
                         }
+                    }
                 )
 
                 // LINUX PROCESS
                 SettingsToggle(
-                        label = stringResource(strings.show_linux_process),
-                        showSwitch = true,
-                        default = showLinuxProcess,
-                        isEnabled = !(showLinuxProcess && !showUserApps && !showSystemApps),
-                        sideEffect = { newValue ->
-                            if (!newValue && !showUserApps && !showSystemApps) return@SettingsToggle
-                            scope.launch {
-                                Settings.showLinuxProcess = newValue
-                                viewModel.setShowLinuxProcess(newValue)
-                            }
+                    label = stringResource(strings.show_linux_process),
+                    showSwitch = true,
+                    default = showLinuxProcess,
+                    isEnabled = !(showLinuxProcess && !showUserApps && !showSystemApps),
+                    sideEffect = { newValue ->
+                        if (!newValue && !showUserApps && !showSystemApps) return@SettingsToggle
+                        scope.launch {
+                            Settings.showLinuxProcess = newValue
+                            viewModel.setShowLinuxProcess(newValue)
                         }
+                    }
                 )
             }
         }
@@ -141,42 +141,42 @@ fun Processes(
 
             DividerColumn {
                 SettingsToggle(
-                        default = false,
-                        showSwitch = false,
-                        startWidget = {
-                            RadioButton(
-                                    selected = sortBy == ProcessViewModel.Sortby.Ram.id,
-                                    onClick = { viewModel.setSortBy(ProcessViewModel.Sortby.Ram) }
-                            )
-                        },
-                        label = "Sort by RAM",
-                        sideEffect = { viewModel.setSortBy(ProcessViewModel.Sortby.Ram) }
+                    default = false,
+                    showSwitch = false,
+                    startWidget = {
+                        RadioButton(
+                            selected = sortBy == ProcessViewModel.Sortby.Ram.id,
+                            onClick = { viewModel.setSortBy(ProcessViewModel.Sortby.Ram) }
+                        )
+                    },
+                    label = "Sort by RAM",
+                    sideEffect = { viewModel.setSortBy(ProcessViewModel.Sortby.Ram) }
                 )
 
                 SettingsToggle(
-                        default = false,
-                        showSwitch = false,
-                        startWidget = {
-                            RadioButton(
-                                    selected = sortBy == ProcessViewModel.Sortby.Cpu.id,
-                                    onClick = { viewModel.setSortBy(ProcessViewModel.Sortby.Cpu) }
-                            )
-                        },
-                        label = "Sort by CPU",
-                        sideEffect = { viewModel.setSortBy(ProcessViewModel.Sortby.Cpu) }
+                    default = false,
+                    showSwitch = false,
+                    startWidget = {
+                        RadioButton(
+                            selected = sortBy == ProcessViewModel.Sortby.Cpu.id,
+                            onClick = { viewModel.setSortBy(ProcessViewModel.Sortby.Cpu) }
+                        )
+                    },
+                    label = "Sort by CPU",
+                    sideEffect = { viewModel.setSortBy(ProcessViewModel.Sortby.Cpu) }
                 )
 
                 SettingsToggle(
-                        default = false,
-                        showSwitch = false,
-                        startWidget = {
-                            RadioButton(
-                                    selected = sortBy == ProcessViewModel.Sortby.A_z.id,
-                                    onClick = { viewModel.setSortBy(ProcessViewModel.Sortby.A_z) }
-                            )
-                        },
-                        label = "Sort by Name (A-z)",
-                        sideEffect = { viewModel.setSortBy(ProcessViewModel.Sortby.A_z) }
+                    default = false,
+                    showSwitch = false,
+                    startWidget = {
+                        RadioButton(
+                            selected = sortBy == ProcessViewModel.Sortby.A_z.id,
+                            onClick = { viewModel.setSortBy(ProcessViewModel.Sortby.A_z) }
+                        )
+                    },
+                    label = "Sort by Name (A-z)",
+                    sideEffect = { viewModel.setSortBy(ProcessViewModel.Sortby.A_z) }
                 )
             }
         }
@@ -184,55 +184,55 @@ fun Processes(
 
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         val content =
-                @Composable
-                {
-                    val listState = rememberLazyListState()
+            @Composable
+            {
+                val listState = rememberLazyListState()
 
-                    val filteredProcesses by viewModel.filteredProcesses.collectAsState()
+                val filteredProcesses by viewModel.filteredProcesses.collectAsState()
 
-                    if (filteredProcesses.isNotEmpty()) {
+                if (filteredProcesses.isNotEmpty()) {
 
-                        LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
-                            items(filteredProcesses, key = { it.proc.pid }) { uiProc ->
-                                ProcessItem(
-                                        modifier,
-                                        uiProc,
-                                        navController = navController,
-                                        onKillClicked = { target -> showKillDialog = target }
-                                )
-                            }
-
-                            item { Spacer(modifier = Modifier.padding(bottom = 32.dp)) }
+                    LazyColumn(modifier = Modifier.fillMaxSize(), state = listState) {
+                        items(filteredProcesses, key = { it.proc.pid }) { uiProc ->
+                            ProcessItem(
+                                modifier,
+                                uiProc,
+                                navController = navController,
+                                onKillClicked = { target -> showKillDialog = target }
+                            )
                         }
-                    } else {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            val messages =
-                                    listOf(
-                                            "¯\\_(ツ)_/¯",
-                                            "(¬_¬ )",
-                                            "(╯°□°）╯︵ ┻━┻",
-                                            "(>_<)",
-                                            "(ಠ_ಠ)",
-                                            stringResource(R.string.emoji_no_data),
-                                            "(o_O)"
-                                    )
 
-                            val message = rememberSaveable { messages.random() }
-                            Text(message)
+                        item { Spacer(modifier = Modifier.padding(bottom = 32.dp)) }
+                    }
+                } else {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        val messages =
+                            listOf(
+                                "¯\\_(ツ)_/¯",
+                                "(¬_¬ )",
+                                "(╯°□°）╯︵ ┻━┻",
+                                "(>_<)",
+                                "(ಠ_ಠ)",
+                                stringResource(R.string.emoji_no_data),
+                                "(o_O)"
+                            )
 
-                            Spacer(modifier = Modifier.padding(vertical = 16.dp))
+                        val message = rememberSaveable { messages.random() }
+                        Text(message)
 
-                            Button(onClick = { viewModel.refreshProcessesManual() }) {
-                                Text(stringResource(R.string.refresh))
-                            }
+                        Spacer(modifier = Modifier.padding(vertical = 16.dp))
+
+                        Button(onClick = { viewModel.refreshProcessesManual() }) {
+                            Text(stringResource(R.string.refresh))
                         }
                     }
                 }
+            }
 
         if (pullToRefresh_procs) {
             PullToRefreshBox(
-                    isRefreshing = viewModel.isLoading.value,
-                    onRefresh = { viewModel.refreshProcessesManual() }
+                isRefreshing = viewModel.isLoading.value,
+                onRefresh = { viewModel.refreshProcessesManual() }
             ) { content() }
         } else {
             content()
@@ -244,145 +244,156 @@ const val textLimit = 40
 
 @Composable
 fun ProcessItem(
-        modifier: Modifier,
-        uiProc: ProcessUiModel,
-        navController: NavController,
-        onKillClicked: (ProcessUiModel) -> Unit
+    modifier: Modifier,
+    uiProc: ProcessUiModel,
+    navController: NavController,
+    onKillClicked: (ProcessUiModel) -> Unit
 ) {
 
     PreferenceTemplate(
-            modifier =
-                    modifier.padding(8.dp)
-                            .clip(RoundedCornerShape(16.dp))
-                            .combinedClickable(
-                                    indication = ripple(),
-                                    enabled = !uiProc.killed.value,
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    onClick = {
-                                        navController.navigate(
-                                                SettingsRoutes.ProcessInfo.createRoute(uiProc)
-                                        )
-                                    }
-                            ),
-            contentModifier =
-                    Modifier.fillMaxHeight().padding(vertical = 16.dp).padding(start = 16.dp),
-            enabled = !uiProc.killed.value,
-            title = {
-                Text(
-                        fontWeight = FontWeight.Bold,
-                        text =
-                                if (uiProc.name.length > textLimit) {
-                                    uiProc.name.take(textLimit) + "..."
-                                } else uiProc.name,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                )
-            },
-            description = {
-                // Text(uiProc.proc.cmdLine.removePrefix("/system/bin/").take(textLimit))
-
-                Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start,
-                        verticalAlignment = Alignment.CenterVertically
-                ) {
-
-                    // RAM Section
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                                painter = painterResource(id = R.drawable.memory_alt_24px),
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(2.dp))
-
-                        Text(
-                                text = "${uiProc.proc.memoryUsageKb / 1024} MB",
-                                style = MaterialTheme.typography.bodySmall
+        modifier =
+            modifier
+                .padding(8.dp)
+                .clip(RoundedCornerShape(16.dp))
+                .combinedClickable(
+                    indication = ripple(),
+                    enabled = !uiProc.killed.value,
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = {
+                        navController.navigate(
+                            SettingsRoutes.ProcessInfo.createRoute(uiProc)
                         )
                     }
+                ),
+        contentModifier =
+            Modifier
+                .fillMaxHeight()
+                .padding(vertical = 16.dp)
+                .padding(start = 16.dp),
+        enabled = !uiProc.killed.value,
+        title = {
+            Text(
+                fontWeight = FontWeight.Bold,
+                text =
+                    if (uiProc.name.length > textLimit) {
+                        uiProc.name.take(textLimit) + "..."
+                    } else uiProc.name,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
+        description = {
+            // Text(uiProc.proc.cmdLine.removePrefix("/system/bin/").take(textLimit))
 
-                    Spacer(modifier = Modifier.width(6.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-                    // CPU Section
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Image(
-                                painter = painterResource(id = R.drawable.cpu_24px),
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(2.dp))
-
-                        Text(
-                                text =
-                                        "${
-                            String.format(Locale.ENGLISH, "%.1f", uiProc.proc.cpuUsage)
-                        }%",
-                                style = MaterialTheme.typography.bodySmall
-                        )
-                    }
-                }
-            },
-            applyPaddings = false,
-            startWidget = {
-                if (uiProc.icon != null) {
+                // RAM Section
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                            bitmap = uiProc.icon,
-                            contentDescription = "App Icon",
-                            modifier = Modifier.padding(start = 19.dp).size(24.dp),
+                        painter = painterResource(id = R.drawable.memory_alt_24px),
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(2.dp))
+
+                    Text(
+                        text = "${uiProc.proc.memoryUsageKb / 1024} MB",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                // CPU Section
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Image(
+                        painter = painterResource(id = R.drawable.cpu_24px),
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(2.dp))
+
+                    Text(
+                        text =
+                            "${
+                                String.format(Locale.ENGLISH, "%.1f", uiProc.proc.cpuUsage)
+                            }%",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+        },
+        applyPaddings = false,
+        startWidget = {
+            if (uiProc.icon != null) {
+                Image(
+                    bitmap = uiProc.icon,
+                    contentDescription = "App Icon",
+                    modifier = Modifier
+                        .padding(start = 19.dp)
+                        .size(24.dp),
+                )
+            } else {
+                val fallbackId =
+                    when {
+                        uiProc.proc.cmdLine.startsWith("/vendor") ||
+                                uiProc.proc.cmdLine.isEmpty() -> R.drawable.cpu_24px
+
+                        uiProc.proc.cmdLine.startsWith("/data/local/tmp") ||
+                                uiProc.proc.uid == 2000 -> R.drawable.usb_24px
+
+                        else -> R.drawable.ic_android_black_24dp
+                    }
+
+                Image(
+                    painter = painterResource(id = fallbackId),
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .padding(start = 19.dp)
+                            .size(24.dp)
+                            .alpha(if (!uiProc.killed.value) 1f else 0.3f),
+                )
+            }
+        },
+        endWidget = {
+            if (uiProc.isUserApp) {
+                if (uiProc.killing.value) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(end = 22.dp)
+                            .size(16.dp),
+                        strokeWidth = 2.dp
                     )
                 } else {
-                    val fallbackId =
-                            when {
-                                uiProc.proc.cmdLine.startsWith("/vendor") ||
-                                        uiProc.proc.cmdLine.isEmpty() -> R.drawable.cpu_24px
-                                uiProc.proc.cmdLine.startsWith("/data/local/tmp") ||
-                                        uiProc.proc.uid == 2000 -> R.drawable.usb_24px
-                                else -> R.drawable.ic_android_black_24dp
-                            }
-
-                    Image(
-                            painter = painterResource(id = fallbackId),
-                            contentDescription = null,
-                            modifier =
-                                    Modifier.padding(start = 19.dp)
-                                            .size(24.dp)
-                                            .alpha(if (!uiProc.killed.value) 1f else 0.3f),
-                    )
-                }
-            },
-            endWidget = {
-                if (uiProc.isUserApp) {
-                    if (uiProc.killing.value) {
-                        CircularProgressIndicator(
-                                modifier = Modifier.padding(end = 22.dp).size(16.dp),
-                                strokeWidth = 2.dp
-                        )
-                    } else {
-                        IconButton(
-                                modifier = Modifier.padding(end = 7.dp),
-                                enabled = !uiProc.killed.value,
-                                onClick = {
-                                    //                            viewModel.viewModelScope.launch {
-                                    //                                uiProc.killing.value = true
-                                    //                                uiProc.killed.value =
-                                    // killProc(uiProc.proc)
-                                    //                                delay(300)
-                                    //                                uiProc.killing.value = false
-                                    //                            }
-                                    onKillClicked(uiProc)
-                                }
-                        ) {
-                            if (uiProc.killed.value) {
-                                Icon(imageVector = Icons.Outlined.Check, null)
-                            } else {
-                                Icon(imageVector = Icons.Outlined.Close, null)
-                            }
+                    IconButton(
+                        modifier = Modifier.padding(end = 7.dp),
+                        enabled = !uiProc.killed.value,
+                        onClick = {
+                            //                            viewModel.viewModelScope.launch {
+                            //                                uiProc.killing.value = true
+                            //                                uiProc.killed.value =
+                            // killProc(uiProc.proc)
+                            //                                delay(300)
+                            //                                uiProc.killing.value = false
+                            //                            }
+                            onKillClicked(uiProc)
+                        }
+                    ) {
+                        if (uiProc.killed.value) {
+                            Icon(imageVector = Icons.Outlined.Check, null)
+                        } else {
+                            Icon(imageVector = Icons.Outlined.Close, null)
                         }
                     }
                 }
             }
+        }
     )
 }

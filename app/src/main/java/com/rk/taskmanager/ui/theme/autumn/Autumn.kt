@@ -1,6 +1,5 @@
 package com.rk.taskmanager.ui.theme.autumn
 
-import android.graphics.Color
 import androidx.annotation.Keep
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -9,8 +8,8 @@ import com.rk.taskmanager.ui.theme.Theme
 
 @Keep
 object Autumn : Theme() {
-   override val nameRes: Int = strings.autumn
-   override val lightScheme = lightColorScheme(
+    override val nameRes: Int = strings.autumn
+    override val lightScheme = lightColorScheme(
         primary = primaryLight,
         onPrimary = onPrimaryLight,
         primaryContainer = primaryContainerLight,
@@ -48,7 +47,7 @@ object Autumn : Theme() {
         surfaceContainerHighest = surfaceContainerHighestLight,
     )
 
-     override val darkScheme = darkColorScheme(
+    override val darkScheme = darkColorScheme(
         primary = primaryDark,
         onPrimary = onPrimaryDark,
         primaryContainer = primaryContainerDark,

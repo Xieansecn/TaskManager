@@ -18,7 +18,12 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
 @Composable
-fun ScrollableTabLayout(modifier: Modifier,tabs: MutableList<String>,content: @Composable (index:Int) -> Unit,animation:Boolean = false) {
+fun ScrollableTabLayout(
+    modifier: Modifier,
+    tabs: MutableList<String>,
+    content: @Composable (index: Int) -> Unit,
+    animation: Boolean = false
+) {
     val pagerState = rememberPagerState(pageCount = { tabs.size })
     val scope = rememberCoroutineScope()
     Column(modifier = modifier.fillMaxWidth()) {
@@ -26,16 +31,16 @@ fun ScrollableTabLayout(modifier: Modifier,tabs: MutableList<String>,content: @C
             selectedTabIndex = pagerState.currentPage,
             edgePadding = 0.dp,
             modifier = Modifier.fillMaxWidth(),
-            divider = {  }
+            divider = { }
         ) {
             tabs.forEachIndexed { index, title ->
                 Tab(
                     selected = pagerState.currentPage == index,
                     onClick = {
                         scope.launch {
-                            if (animation){
+                            if (animation) {
                                 pagerState.animateScrollToPage(index)
-                            }else{
+                            } else {
                                 pagerState.scrollToPage(index)
                             }
 

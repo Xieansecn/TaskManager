@@ -34,7 +34,8 @@ import com.rk.taskmanager.R
 
 @Composable
 fun About(modifier: Modifier = Modifier) {
-    val packageInfo = LocalContext.current.packageManager.getPackageInfo(LocalContext.current.packageName, 0)
+    val packageInfo =
+        LocalContext.current.packageManager.getPackageInfo(LocalContext.current.packageName, 0)
     val versionName = packageInfo.versionName
     val versionCode = PackageInfoCompat.getLongVersionCode(packageInfo)
     val context = LocalContext.current
@@ -151,39 +152,66 @@ fun About(modifier: Modifier = Modifier) {
                     Modifier.combinedClickable(
                         enabled = true,
                         onClick = {},
-                        onLongClick = { copyToClipboard(context,versionName.toString()) },
+                        onLongClick = { copyToClipboard(context, versionName.toString()) },
                     ),
                 title = {
-                    Text(text = stringResource(R.string.version), style = MaterialTheme.typography.titleMedium)
-                },
-                description = { Text(text = versionName.toString(), style = MaterialTheme.typography.titleSmall) },
-            )
-
-            PreferenceTemplate(
-                modifier =
-                    Modifier.combinedClickable(
-                        enabled = true,
-                        onClick = {},
-                        onLongClick = { copyToClipboard(context,versionCode.toString()) },
-                    ),
-                title = {
-                    Text(text = stringResource(R.string.version_code), style = MaterialTheme.typography.titleMedium)
-                },
-                description = { Text(text = versionCode.toString(), style = MaterialTheme.typography.titleSmall) },
-            )
-
-            PreferenceTemplate(
-                modifier =
-                    Modifier.combinedClickable(
-                        enabled = true,
-                        onClick = {},
-                        onLongClick = { copyToClipboard(context,BuildConfig.GIT_SHORT_COMMIT_HASH) },
-                    ),
-                title = {
-                    Text(text = stringResource(R.string.git_commit_hash), style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = stringResource(R.string.version),
+                        style = MaterialTheme.typography.titleMedium
+                    )
                 },
                 description = {
-                    Text(text = BuildConfig.GIT_SHORT_COMMIT_HASH, style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        text = versionName.toString(),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                },
+            )
+
+            PreferenceTemplate(
+                modifier =
+                    Modifier.combinedClickable(
+                        enabled = true,
+                        onClick = {},
+                        onLongClick = { copyToClipboard(context, versionCode.toString()) },
+                    ),
+                title = {
+                    Text(
+                        text = stringResource(R.string.version_code),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                },
+                description = {
+                    Text(
+                        text = versionCode.toString(),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                },
+            )
+
+            PreferenceTemplate(
+                modifier =
+                    Modifier.combinedClickable(
+                        enabled = true,
+                        onClick = {},
+                        onLongClick = {
+                            copyToClipboard(
+                                context,
+                                BuildConfig.GIT_SHORT_COMMIT_HASH
+                            )
+                        },
+                    ),
+                title = {
+                    Text(
+                        text = stringResource(R.string.git_commit_hash),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                },
+                description = {
+                    Text(
+                        text = BuildConfig.GIT_SHORT_COMMIT_HASH,
+                        style = MaterialTheme.typography.titleSmall
+                    )
                 },
             )
         }
@@ -191,12 +219,17 @@ fun About(modifier: Modifier = Modifier) {
 }
 
 
-private fun copyToClipboard(context: Context,text: String, showToast: Boolean = true) {
-    copyToClipboard(context,label = "Xed-Editor", text, showToast = showToast)
+private fun copyToClipboard(context: Context, text: String, showToast: Boolean = true) {
+    copyToClipboard(context, label = "Xed-Editor", text, showToast = showToast)
 }
 
 
-private fun copyToClipboard(context: Context,label: String, text: String, showToast: Boolean = true) {
+private fun copyToClipboard(
+    context: Context,
+    label: String,
+    text: String,
+    showToast: Boolean = true
+) {
     val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     val clip = ClipData.newPlainText(label, text)
     clipboard.setPrimaryClip(clip)

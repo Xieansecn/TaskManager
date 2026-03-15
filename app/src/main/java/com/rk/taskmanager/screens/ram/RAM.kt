@@ -56,6 +56,7 @@ val swapYValues = ArrayDeque<Int>(MAX_GRAPH_POINTS).apply { repeat(MAX_GRAPH_POI
 
 
 private val RamModelProducer = CartesianChartModelProducer()
+
 //val ramYValues = mutableStateListOf<Number>().apply { repeat(MAX_POINTS) { add(0) } }
 var RamUsage by mutableIntStateOf(0)
 var usedRam by mutableLongStateOf(0L)
@@ -65,7 +66,6 @@ var SwapUsage by mutableIntStateOf(0)
 
 var usedSwap by mutableLongStateOf(0L)
 var totalSwap by mutableLongStateOf(0L)
-
 
 
 suspend fun getSystemRamUsage(context: Context): Int = withContext(Dispatchers.IO) {
@@ -137,7 +137,7 @@ private fun RamAndSwapUsageToggle() {
 
 
 @Composable
-fun RAM(modifier: Modifier = Modifier,viewModel: ProcessViewModel) {
+fun RAM(modifier: Modifier = Modifier, viewModel: ProcessViewModel) {
     LaunchedEffect(Unit) {
         mutex.withLock {
             RamModelProducer.runTransaction {

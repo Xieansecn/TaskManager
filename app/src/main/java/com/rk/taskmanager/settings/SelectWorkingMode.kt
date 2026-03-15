@@ -36,9 +36,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-enum class WorkingMode(val id:Int,val nameRes: Int){
-    ROOT(0,strings.root),
-    SHIZUKU(1,strings.shizuku)
+enum class WorkingMode(val id: Int, val nameRes: Int) {
+    ROOT(0, strings.root),
+    SHIZUKU(1, strings.shizuku)
 }
 
 @OptIn(DelicateCoroutinesApi::class)

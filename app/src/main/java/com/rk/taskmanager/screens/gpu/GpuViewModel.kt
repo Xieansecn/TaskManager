@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.opengl.EGL14
 import android.opengl.EGLConfig
 import android.opengl.GLES20
-import android.os.Build
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -113,7 +112,8 @@ class GpuViewModel(application: Application) : AndroidViewModel(application) {
             val maxRenderbufferSize = getInt(GLES20.GL_MAX_RENDERBUFFER_SIZE)
 
             // Cleanup
-            EGL14.eglMakeCurrent(display,
+            EGL14.eglMakeCurrent(
+                display,
                 EGL14.EGL_NO_SURFACE,
                 EGL14.EGL_NO_SURFACE,
                 EGL14.EGL_NO_CONTEXT

@@ -31,14 +31,22 @@ fun DaemonSettings(modifier: Modifier = Modifier) {
                         Settings.workingMode = mode.id
                         selectedMode.intValue = mode.id
 
-                        Toast.makeText(context, strings.requires_daemon_restart.getString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            strings.requires_daemon_restart.getString(),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     },
                     showSwitch = false,
                     startWidget = {
                         RadioButton(selected = selectedMode.intValue == mode.id, onClick = {
                             Settings.workingMode = mode.id
                             selectedMode.intValue = mode.id
-                            Toast.makeText(context, strings.requires_daemon_restart.getString(), Toast.LENGTH_SHORT)
+                            Toast.makeText(
+                                context,
+                                strings.requires_daemon_restart.getString(),
+                                Toast.LENGTH_SHORT
+                            )
                                 .show()
 
                         })

@@ -1,4 +1,5 @@
 import java.util.Properties
+
 val isIzzyOrFdroid = false
 
 
@@ -10,13 +11,34 @@ plugins {
 }
 
 val gitCommitHash: Provider<String> =
-    providers.exec { commandLine("git", "rev-parse", "--short=8", "HEAD") }.standardOutput.asText.map { it.trim() }
+    providers.exec {
+        commandLine(
+            "git",
+            "rev-parse",
+            "--short=8",
+            "HEAD"
+        )
+    }.standardOutput.asText.map { it.trim() }
 
 val fullGitCommitHash: Provider<String> =
-    providers.exec { commandLine("git", "rev-parse", "HEAD") }.standardOutput.asText.map { it.trim() }
+    providers.exec {
+        commandLine(
+            "git",
+            "rev-parse",
+            "HEAD"
+        )
+    }.standardOutput.asText.map { it.trim() }
 
 val gitCommitDate: Provider<String> =
-    providers.exec { commandLine("git", "show", "-s", "--format=%cI", "HEAD") }.standardOutput.asText.map { it.trim() }
+    providers.exec {
+        commandLine(
+            "git",
+            "show",
+            "-s",
+            "--format=%cI",
+            "HEAD"
+        )
+    }.standardOutput.asText.map { it.trim() }
 
 android {
     namespace = "com.rk.taskmanager"
@@ -59,7 +81,7 @@ android {
 
 
     buildTypes {
-        release{
+        release {
             isMinifyEnabled = isIzzyOrFdroid.not()
             isCrunchPngs = isIzzyOrFdroid.not()
             isShrinkResources = isIzzyOrFdroid.not()
@@ -75,7 +97,7 @@ android {
             buildConfigField("String", "GIT_SHORT_COMMIT_HASH", "\"${gitCommitHash.get()}\"")
             buildConfigField("String", "GIT_COMMIT_DATE", "\"${gitCommitDate.get()}\"")
         }
-        debug{
+        debug {
             versionNameSuffix = "-DEBUG"
 
 

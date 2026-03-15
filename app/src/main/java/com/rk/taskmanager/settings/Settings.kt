@@ -3,74 +3,78 @@ package com.rk.taskmanager.settings
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import com.rk.taskmanager.ProcessViewModel
 import com.rk.taskmanager.TaskManager
 
 object Settings {
     var shouldPreLoadThemeAd
-        get() = Preference.getBoolean(key = "theme-ad",true)
-        set(value) = Preference.setBoolean(key = "theme-ad",value)
+        get() = Preference.getBoolean(key = "theme-ad", true)
+        set(value) = Preference.setBoolean(key = "theme-ad", value)
 
 
     var theme
         //0 is the id of the theme in the themes hashmap
-        get() = Preference.getInt(key = "theme",0)
-        set(value) { Preference.setInt(key = "theme",value) }
-
+        get() = Preference.getInt(key = "theme", 0)
+        set(value) {
+            Preference.setInt(key = "theme", value)
+        }
 
 
     var sortby
         get() = Preference.getInt(key = "sortby", ProcessViewModel.Sortby.Ram.id)
-        set(value) { Preference.setInt(key = "sortby",value) }
+        set(value) {
+            Preference.setInt(key = "sortby", value)
+        }
 
     var updateFrequency
-        get() = Preference.getInt(key = "updateFrequency",800)
-        set(value) = Preference.setInt(key = "updateFrequency",value)
+        get() = Preference.getInt(key = "updateFrequency", 800)
+        set(value) = Preference.setInt(key = "updateFrequency", value)
 
     var workingMode
         get() = Preference.getInt(key = "workingMode", -1)
-        set(value) = Preference.setInt(key = "workingMode",value)
+        set(value) = Preference.setInt(key = "workingMode", value)
     var monet
         get() = Preference.getBoolean(
             key = "monet",
             default = false
         )
-        set(value) = Preference.setBoolean(key = "monet",value)
+        set(value) = Preference.setBoolean(key = "monet", value)
 
     var showSystemApps
         get() = Preference.getBoolean(
             key = "showSystemApps",
             default = true
         )
-        set(value) = Preference.setBoolean(key = "showSystemApps",value)
+        set(value) = Preference.setBoolean(key = "showSystemApps", value)
 
     var showUserApps
         get() = Preference.getBoolean(
             key = "showUserApps",
             default = true
         )
-        set(value) = Preference.setBoolean(key = "showUserApps",value)
+        set(value) = Preference.setBoolean(key = "showUserApps", value)
 
     var showLinuxProcess
         get() = Preference.getBoolean(
             key = "showLinuxProcess",
             default = false
         )
-        set(value) = Preference.setBoolean(key = "showLinuxProcess",value)
+        set(value) = Preference.setBoolean(key = "showLinuxProcess", value)
 
-    var kills get() = Preference.getInt(key = "kills", 0)
-        set(value) = Preference.setInt(key = "kills",value)
+    var kills
+        get() = Preference.getInt(key = "kills", 0)
+        set(value) = Preference.setInt(key = "kills", value)
 
-    var supportDialogTimeStamp get() = Preference.getLong(key = "supportDialogTimeStamp", 0)
-        set(value) = Preference.setLong(key = "supportDialogTimeStamp",value)
+    var supportDialogTimeStamp
+        get() = Preference.getLong(key = "supportDialogTimeStamp", 0)
+        set(value) = Preference.setLong(key = "supportDialogTimeStamp", value)
 
     var pullToRefresh_procs
         get() = Preference.getBoolean(
             key = "pullToRefresh_procs",
             default = true
         )
-        set(value) = Preference.setBoolean(key = "pullToRefresh_procs",value)
+        set(value) = Preference.setBoolean(key = "pullToRefresh_procs", value)
 
 
     var confirmkill
@@ -78,13 +82,14 @@ object Settings {
             key = "confirmkill",
             default = true
         )
-        set(value) = Preference.setBoolean(key = "confirmkill",value)
+        set(value) = Preference.setBoolean(key = "confirmkill", value)
 
 
 }
 
 object Preference {
-    private var sharedPreferences: SharedPreferences = TaskManager.requireContext().getSharedPreferences("Settings", Context.MODE_PRIVATE)
+    private var sharedPreferences: SharedPreferences =
+        TaskManager.requireContext().getSharedPreferences("Settings", Context.MODE_PRIVATE)
 
     //store the result into memory for faster access
     private val stringCache = hashMapOf<String, String?>()
@@ -94,38 +99,38 @@ object Preference {
     private val floatCache = hashMapOf<String, Float>()
 
     @SuppressLint("ApplySharedPref")
-    fun clearData(){
+    fun clearData() {
         sharedPreferences.edit().clear().commit()
     }
 
-    fun removeKey(key: String){
-        if (sharedPreferences.contains(key).not()){
+    fun removeKey(key: String) {
+        if (sharedPreferences.contains(key).not()) {
             return
         }
 
         sharedPreferences.edit().remove(key).apply()
 
-        if (stringCache.containsKey(key)){
+        if (stringCache.containsKey(key)) {
             stringCache.remove(key)
             return
         }
 
-        if (boolCache.containsKey(key)){
+        if (boolCache.containsKey(key)) {
             boolCache.remove(key)
             return
         }
 
-        if (intCache.containsKey(key)){
+        if (intCache.containsKey(key)) {
             intCache.remove(key)
             return
         }
 
-        if (longCache.containsKey(key)){
+        if (longCache.containsKey(key)) {
             longCache.remove(key)
             return
         }
 
-        if (floatCache.containsKey(key)){
+        if (floatCache.containsKey(key)) {
             floatCache.remove(key)
             return
         }
@@ -152,7 +157,6 @@ object Preference {
     }
 
 
-
     fun getString(key: String, default: String): String {
         runCatching {
             return stringCache[key] ?: sharedPreferences.getString(key, default)!!
@@ -163,6 +167,7 @@ object Preference {
         }
         return default
     }
+
     fun setString(key: String, value: String?) {
         stringCache[key] = value
         runCatching {
@@ -213,7 +218,7 @@ object Preference {
         longCache[key] = value
         runCatching {
             val editor = sharedPreferences.edit()
-            editor.putLong(key,value)
+            editor.putLong(key, value)
             editor.apply()
         }.onFailure {
             it.printStackTrace()
@@ -235,7 +240,7 @@ object Preference {
         floatCache[key] = value
         runCatching {
             val editor = sharedPreferences.edit()
-            editor.putFloat(key,value)
+            editor.putFloat(key, value)
             editor.apply()
         }.onFailure {
             it.printStackTrace()

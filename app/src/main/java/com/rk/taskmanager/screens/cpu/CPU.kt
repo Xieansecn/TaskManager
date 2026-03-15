@@ -1,7 +1,6 @@
 package com.rk.taskmanager.screens.cpu
 
 import android.graphics.Typeface
-import android.os.Handler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,24 +9,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,24 +46,16 @@ import com.patrykandpatrick.vico.core.common.component.TextComponent
 import com.patrykandpatrick.vico.core.common.shader.ShaderProvider
 import com.rk.components.SettingsToggle
 import com.rk.components.rememberMarker
-import com.rk.taskmanager.SystemViewModel
-import androidx.compose.runtime.collectAsState
 import com.rk.taskmanager.MainActivity
 import com.rk.taskmanager.ProcessViewModel
-import com.rk.taskmanager.SettingsRoutes
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import java.text.DecimalFormat
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.res.stringResource
-import com.rk.daemon_messages
-import com.rk.send_daemon_messages
 import com.rk.taskmanager.R
+import com.rk.taskmanager.SettingsRoutes
+import com.rk.taskmanager.SystemViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import java.text.DecimalFormat
 
 //global stuff
 const val MAX_GRAPH_POINTS = 120
@@ -79,9 +67,9 @@ val MarkerValueFormatter = DefaultCartesianMarker.ValueFormatter.default(YDecima
 val xValues = List(MAX_GRAPH_POINTS) { it.toDouble() }
 
 
-
 //CPU
-private val cpuYValues = ArrayDeque<Int>(MAX_GRAPH_POINTS).apply { repeat(MAX_GRAPH_POINTS) { add(0) } }
+private val cpuYValues =
+    ArrayDeque<Int>(MAX_GRAPH_POINTS).apply { repeat(MAX_GRAPH_POINTS) { add(0) } }
 
 private val CpuModelProducer = CartesianChartModelProducer()
 
@@ -90,7 +78,7 @@ private val mutex = Mutex()
 
 suspend fun updateCpuGraph(usage: Int) {
     mutex.withLock {
-        withContext(Dispatchers.Main){
+        withContext(Dispatchers.Main) {
             cpuUsage = usage
         }
         cpuYValues.removeFirst()
@@ -108,7 +96,11 @@ suspend fun updateCpuGraph(usage: Int) {
 }
 
 @Composable
-fun CPU(modifier: Modifier = Modifier, viewModel: ProcessViewModel, systemViewModel: SystemViewModel) {
+fun CPU(
+    modifier: Modifier = Modifier,
+    viewModel: ProcessViewModel,
+    systemViewModel: SystemViewModel
+) {
     val lineColor = MaterialTheme.colorScheme.primary
 
     LaunchedEffect(Unit) {
@@ -210,7 +202,10 @@ fun CPU(modifier: Modifier = Modifier, viewModel: ProcessViewModel, systemViewMo
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
-                            InfoItem(stringResource(R.string.core_number), cpuInfo?.cores.toString())
+                            InfoItem(
+                                stringResource(R.string.core_number),
+                                cpuInfo?.cores.toString()
+                            )
                         }
                         Column(modifier = Modifier.weight(1f)) {
                             InfoItem(stringResource(R.string.governor), cpuInfo?.governor ?: "N/A")
@@ -223,11 +218,13 @@ fun CPU(modifier: Modifier = Modifier, viewModel: ProcessViewModel, systemViewMo
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             InfoItem(
-                                stringResource(R.string.temperature), if (temperature.toIntOrNull() != null){
-                                stringResource(R.string.temp_display, temperature)
-                            }else{
-                                temperature
-                            })
+                                stringResource(R.string.temperature),
+                                if (temperature.toIntOrNull() != null) {
+                                    stringResource(R.string.temp_display, temperature)
+                                } else {
+                                    temperature
+                                }
+                            )
                         }
                     }
                 }
@@ -245,10 +242,16 @@ fun CPU(modifier: Modifier = Modifier, viewModel: ProcessViewModel, systemViewMo
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
-                            InfoItem(stringResource(R.string.processes), viewModel.procCount.collectAsState().value.toString())
+                            InfoItem(
+                                stringResource(R.string.processes),
+                                viewModel.procCount.collectAsState().value.toString()
+                            )
                         }
                         Column(modifier = Modifier.weight(1f)) {
-                            InfoItem(stringResource(R.string.threads), viewModel.threadCount.collectAsState().value.toString())
+                            InfoItem(
+                                stringResource(R.string.threads),
+                                viewModel.threadCount.collectAsState().value.toString()
+                            )
                         }
 
                     }

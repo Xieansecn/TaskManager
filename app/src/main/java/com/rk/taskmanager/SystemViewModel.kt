@@ -2,8 +2,8 @@ package com.rk.taskmanager
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rk.send_daemon_messages
 import com.rk.daemon_messages
+import com.rk.send_daemon_messages
 import com.rk.taskmanager.screens.cpu.CpuInfoReader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

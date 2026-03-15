@@ -19,6 +19,12 @@ import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -27,16 +33,10 @@ import androidx.navigation.NavController
 import com.rk.components.compose.preferences.base.PreferenceLayout
 import com.rk.components.compose.preferences.base.PreferenceTemplate
 import com.rk.components.compose.preferences.category.PreferenceCategory
+import com.rk.taskmanager.R
 import com.rk.taskmanager.SettingsRoutes
 import com.rk.taskmanager.strings
 import kotlinx.coroutines.DelicateCoroutinesApi
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.StrokeJoin
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.path
-import com.rk.taskmanager.R
 
 
 @OptIn(
@@ -56,17 +56,17 @@ fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) 
             label = stringResource(R.string.working_mode),
             description = stringResource(R.string.taskmanagerd_settings),
             startWidget = {
-                Icon(imageVector = Icons.Outlined.Android,null)
+                Icon(imageVector = Icons.Outlined.Android, null)
             },
             onNavigate = {
                 navController.navigate(SettingsRoutes.Daemon.route)
-                         },
+            },
         )
         PreferenceCategory(
             label = stringResource(R.string.graph),
             description = stringResource(R.string.cpu_ram_swap_graph_settings),
             startWidget = {
-                Icon(imageVector = Icons.Outlined.MonitorHeart,null)
+                Icon(imageVector = Icons.Outlined.MonitorHeart, null)
             },
             onNavigate = {
                 navController.navigate(SettingsRoutes.Graphs.route)
@@ -78,7 +78,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) 
             label = stringResource(R.string.processes),
             description = stringResource(R.string.settings_for_processes_screen),
             startWidget = {
-                Icon(imageVector = Icons.AutoMirrored.Outlined.FormatListBulleted,null)
+                Icon(imageVector = Icons.AutoMirrored.Outlined.FormatListBulleted, null)
             },
             onNavigate = {
                 navController.navigate(SettingsRoutes.Procs.route)
@@ -89,7 +89,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) 
             label = stringResource(R.string.theme),
             description = stringResource(R.string.look_and_feel),
             startWidget = {
-                Icon(imageVector = Icons.Outlined.ColorLens,null)
+                Icon(imageVector = Icons.Outlined.ColorLens, null)
             },
             onNavigate = {
                 navController.navigate(SettingsRoutes.Themes.route)
@@ -100,7 +100,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) 
             label = stringResource(R.string.support),
             description = stringResource(R.string.support_development),
             startWidget = {
-                Icon(imageVector = FeatherHeart,null)
+                Icon(imageVector = FeatherHeart, null)
             },
             onNavigate = {
                 navController.navigate(SettingsRoutes.Support.route)
@@ -111,7 +111,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, navController: NavController) 
             label = stringResource(R.string.about),
             description = stringResource(R.string.application_info),
             startWidget = {
-                Icon(imageVector = Icons.Outlined.Info,null)
+                Icon(imageVector = Icons.Outlined.Info, null)
             },
             onNavigate = {
                 navController.navigate(SettingsRoutes.About.route)
@@ -144,13 +144,24 @@ fun SelectableCard(
             .fillMaxHeight()
             .padding(vertical = 16.dp)
             .padding(start = 16.dp),
-        title = { Text(fontWeight = FontWeight.Bold, text = label, maxLines = 1, overflow = TextOverflow.Ellipsis) },
+        title = {
+            Text(
+                fontWeight = FontWeight.Bold,
+                text = label,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
         description = { description?.let { Text(it) } },
         enabled = isEnaled,
         applyPaddings = false,
         endWidget = null,
         startWidget = {
-            RadioButton(selected = selected, onClick = onClick, modifier = Modifier.padding(start = 8.dp))
+            RadioButton(
+                selected = selected,
+                onClick = onClick,
+                modifier = Modifier.padding(start = 8.dp)
+            )
         }
     )
 }

@@ -17,11 +17,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,8 +37,8 @@ import com.rk.taskmanager.MainActivity
 import com.rk.taskmanager.ProcessViewModel
 import com.rk.taskmanager.R
 import com.rk.taskmanager.SettingsRoutes
-import com.rk.taskmanager.components.ProcessSearchBar
 import com.rk.taskmanager.SystemViewModel
+import com.rk.taskmanager.components.ProcessSearchBar
 import com.rk.taskmanager.screens.gpu.GpuViewModel
 import com.rk.taskmanager.settings.Settings
 import com.rk.taskmanager.settings.SupportDialog
@@ -52,10 +48,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier = Modifier, navController: NavController, viewModel: ProcessViewModel,gpuViewModel: GpuViewModel, systemViewModel: SystemViewModel) {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: ProcessViewModel,
+    gpuViewModel: GpuViewModel,
+    systemViewModel: SystemViewModel
+) {
 
     var selectedScreen by rememberSaveable { mutableIntStateOf(0) }
     var showFilter by rememberSaveable { mutableStateOf(false) }
@@ -65,7 +66,7 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController, view
         Scaffold(
             modifier = modifier.fillMaxSize(),
             topBar = {
-                if (selectedScreen == 0){
+                if (selectedScreen == 0) {
                     Column {
                         TopAppBar(
                             title = { Text(stringResource(strings.app_name)) },
@@ -97,9 +98,9 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController, view
                         )
                         HorizontalDivider()
                     }
-                }else{
+                } else {
                     ProcessSearchBar(
-                        viewModel = viewModel, 
+                        viewModel = viewModel,
                         navController = navController,
                         onShowFilter = { showFilter = true },
                         onShowSort = { showSort = true }
@@ -109,7 +110,7 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController, view
             },
             bottomBar = {
                 Column {
-                    if (selectedScreen == 0){
+                    if (selectedScreen == 0) {
                         HorizontalDivider()
                     }
                     NavigationBar {
@@ -154,7 +155,7 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController, view
                     0 -> {
                         ResourceHostScreen(
                             viewModel = viewModel,
-                            modifier = Modifier.fillMaxSize(), 
+                            modifier = Modifier.fillMaxSize(),
                             gpuViewModel = gpuViewModel,
                             systemViewModel = systemViewModel
                         )
@@ -162,7 +163,7 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController, view
 
                     1 -> {
                         Processes(
-                            viewModel = viewModel, 
+                            viewModel = viewModel,
                             navController = navController,
                             showFilter = showFilter,
                             onDismissFilter = { showFilter = false },
@@ -183,7 +184,7 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController, view
                     Settings.kills > 20 && (timePassed > thirtyDaysMillis)
             }
 
-            if(showSupportDialog){
+            if (showSupportDialog) {
                 SupportDialog(onDismiss = {
                     Settings.supportDialogTimeStamp = System.currentTimeMillis()
                     showSupportDialog = false
@@ -196,19 +197,18 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController, view
         }
 
 
-
-
     } else {
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(Unit) {
             if (Settings.workingMode != -1) {
                 scope.launch(Dispatchers.Main) {
-                    val daemonResult = startDaemon(context = MainActivity.instance!!, Settings.workingMode)
+                    val daemonResult =
+                        startDaemon(context = MainActivity.instance!!, Settings.workingMode)
                     if (daemonResult != DaemonResult.OK) {
                         delay(2000)
-                        if (isConnected.not()){
-                            if (navController.currentDestination?.route != SettingsRoutes.SelectWorkingMode.route){
+                        if (isConnected.not()) {
+                            if (navController.currentDestination?.route != SettingsRoutes.SelectWorkingMode.route) {
                                 navController.navigate(SettingsRoutes.SelectWorkingMode.route)
                             }
                         }
@@ -224,8 +224,8 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController, view
 
                 LaunchedEffect(isConnected) {
                     delay(5000)
-                    if (isConnected.not()){
-                        if (navController.currentDestination?.route != SettingsRoutes.SelectWorkingMode.route){
+                    if (isConnected.not()) {
+                        if (navController.currentDestination?.route != SettingsRoutes.SelectWorkingMode.route) {
                             navController.navigate(SettingsRoutes.SelectWorkingMode.route)
                         }
                     }
